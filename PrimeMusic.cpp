@@ -126,38 +126,46 @@ std::pair<int, long double> PrimeMusic::whenCycleBreaks(bool log) {
 
 std::pair<int, long double> PrimeMusic::whenCycleConverges(bool log) {
 
-    const auto [interval, centsDeviation] = musicInterval();
+    const auto [_, centsDeviation] = musicInterval();
 
     const int firstNote = _midiNote % 12;
     long double currentFreq = freqFromMidiNote(firstNote);
     const auto& cycle = findPerfectCycle();
 
-    std::cout << std::endl << "WCC: " << centsDeviation << std::endl;
-
     bool converged = false;
 
     size_t steps = 0;
-    for (steps = 1; steps < 5000; ++steps) { //TODO steps limit in class
+    for (steps = 1; steps < interationsLimit; ++steps) { //TODO steps limit in class
 
         currentFreq *= _primeNumber;
         const auto [newNote, cents] = findClosestNote(currentFreq);
         const int currentNote = newNote % 12;
         const int cyclePos = steps % cycle.size();
 
+        if (std::isnan(cents))
+        {
+            std::cout << "NAN reached " <<  steps << std::endl;
+            break;
+        }
+
         //std::cout << steps << ") " << nameMidiNote(currentNote) << " cycle pos " << cyclePos << " and cents " << cents << std::endl;
 
         if (std::abs(cents) < 1. && currentNote == firstNote && cyclePos == 0) {
 
             if (log)
-                std::cout << "Converged! on step " << steps << std::endl;
+                std::cout << "Converged! " << _primeNumber <<  " on step " << steps << std::endl;
             converged = true;
 
             break;
         }
     }
 
+
+
     if (converged == false) {
-        std::cout << "Failed to converge" << std::endl;
+        const auto [newNote, cents] = findClosestNote(currentFreq);
+        std::cout << "Failed to converge " << _primeNumber << " last cents " << cents <<
+                std::endl;
     }
 
     long double fullCycles = static_cast<long double>(steps) / static_cast<long double>(cycle.size());

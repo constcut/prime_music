@@ -74,12 +74,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
     //exploreCyclesAndIntervals();
     //exploreWhenCycleBreaks();
-    //exploreWhenCycleConverges();
-
-    PrimeMusic p(5);
-    p.findPerfectCycle(true);
-
-    p.whenCycleConverges(true);
+    exploreWhenCycleConverges();
 
     return 0;
 }
