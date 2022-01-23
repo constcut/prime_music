@@ -187,25 +187,32 @@ void exploreCycleCoverageOnMult() {
 }
 
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
+void exploreCents(const int prime = 3) {
+
+    auto usual = exploreCents(primeList, primesCount, 1);
+    auto mult = exploreCents(primeList, primesCount, prime);
+    auto multNext = exploreCents(primeList, primesCount, prime * prime);
+
+    for (size_t i = 0; i < usual.size(); ++i) {
+        std::cout << primeList[i] << ") " << usual[i] << std::endl;
+        std::cout << primeList[i] * prime << ") " << mult[i] << " _ "
+                     << mult[i]  - usual[i] << std::endl;
+        std::cout << primeList[i] * prime * prime << ") " << multNext[i] << " _ "
+                  << multNext[i]  - usual[i] <<  " _ " << multNext[i]  - mult[i] << std::endl;
+        std::cout << std::endl;
+    }
+}
+
+
+
+int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) ///TODO эта функия будет просто как пример, офрмить в виде библиотеки
 {
 
     //exploreCycleBreakOnMult(); // TODO unfinished - no conculsion was done
     //exploreCycleCoverageOnMult(); // TODO unfinished - no conculsion was done
+    //exploreCents(2);
 
-    auto usual = exploreCents(primeList, primesCount, 1);
-    auto mult = exploreCents(primeList, primesCount, 3);
-    auto multNext = exploreCents(primeList, primesCount, 3*3);
-
-
-    for (size_t i = 0; i < usual.size(); ++i) {
-        std::cout << primeList[i] << ") " << usual[i] << std::endl;
-        std::cout << primeList[i] * 3 << ") " << mult[i] << " _ "
-                     << mult[i]  - usual[i] << std::endl;
-        std::cout << primeList[i] * 3 * 3 << ") " << multNext[i] << " _ "
-                  << multNext[i]  - usual[i] <<  " _ " << multNext[i]  - mult[i] << std::endl;
-        std::cout << std::endl;
-    }
+    exploreCyclesAndIntervals(primeList, primesCount, 1, true);
 
     return 0;
 }
