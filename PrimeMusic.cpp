@@ -128,23 +128,22 @@ std::pair<int, double> PrimeMusic::whenCycleConverges(bool log) {
 
     const auto [interval, centsDeviation] = musicInterval();
 
-    double cummulateError = 0.0;
-
     const int firstNote = _midiNote % 12;
-    int currentNote = firstNote;
+    double currentFreq = freqFromMidiNote(firstNote);
+    const auto& cycle = findPerfectCycle();
 
     size_t steps = 0;
     for (steps = 1; steps < 10000; ++steps) { //TODO steps limit in class
 
-        currentNote += (interval % 12);
-        currentNote %= 12;
+        currentFreq *= _primeNumber;
+        //currentNote += (interval % 12); //ТУТ ошибка
+        //currentNote %= 12;
+        const auto [newNote, cents] = findClosestNote(currentFreq);
+        const int currentNote = newNote % 12;
 
-        cummulateError += std::abs(centsDeviation);
+        const int cyclePos = steps % cycle.size();
 
-        if (cummulateError >= 50.)
-            cummulateError -= 50.;
-
-        if (cummulateError < 1. && currentNote == firstNote) {
+        if (cents < 1. && currentNote == firstNote && cyclePos == 0) {
 
             if (log)
                 std::cout << "Converged! on step " << steps << std::endl;
@@ -153,7 +152,6 @@ std::pair<int, double> PrimeMusic::whenCycleConverges(bool log) {
         }
     }
 
-    const auto& cycle = findPerfectCycle();
     double fullCycles = static_cast<double>(steps) / static_cast<double>(cycle.size());
 
     if (log)

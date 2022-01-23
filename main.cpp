@@ -59,6 +59,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 
     PrimeMusic p(3);
     p.whenCycleConverges(true);
+    std::cout << std::endl;
+    p.findPerfectCycle(true);
 
     return 0;
 }
