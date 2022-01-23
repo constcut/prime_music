@@ -8,7 +8,7 @@ class PrimeMusic
 {
 public:
     PrimeMusic() = default;
-    PrimeMusic(const int midiNote, double primeNumber);
+    PrimeMusic(const int midiNote, double primeNumber); //TODO midi note as second param and default value = 12
 
     void setup(const int midiNote, double primeNumber);
 
@@ -16,7 +16,7 @@ public:
 
     std::pair<int, double> musicInterval();
 
-    //TODO calculate interval : interval idx or name + deviation in cents
+    const std::vector<int>& findPerfectCycle();
 
 private:
 
@@ -25,6 +25,10 @@ private:
 
     std::vector<int> _noteSequence;
     std::vector<double> _centsSequece;
+
+    std::vector<int> _perfectCycle;
+
+    bool gotCycle(const std::vector<int>& sequence);
 
 };
 

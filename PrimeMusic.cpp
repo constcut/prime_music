@@ -48,3 +48,45 @@ std::pair<int, double> PrimeMusic::musicInterval() {
     const double centsDeviation = (interval - closestInterval) * 100;
     return {closestInterval, centsDeviation};
 }
+
+
+const std::vector<int>& PrimeMusic::findPerfectCycle() {
+
+    std::vector<int> keyNotes {_midiNote % 12 };
+
+    const auto [interval, _] = musicInterval();
+
+    int currentNote = _midiNote;
+    for (size_t i = 1; i < 100000; ++i) {
+        currentNote += interval;
+        keyNotes.push_back(currentNote % 12);
+        if (gotCycle(keyNotes))
+            break;
+    }
+    //TODO insure cycle found
+
+    _perfectCycle = std::vector<int>(keyNotes.begin(),
+                                    keyNotes.begin() + keyNotes.size()/2);
+
+    std::cout << "Perfect cycle for " << _primeNumber << " interval " << interval % 12 << std::endl;
+
+    for (int midiNote: _perfectCycle)
+        std::cout << nameMidiNote(midiNote) << " ";
+
+    std::cout << std::endl << "Cycle length: " << _perfectCycle.size() << std::endl;
+
+    return _perfectCycle;
+}
+
+
+bool PrimeMusic::gotCycle(const std::vector<int>& sequence) {
+   if (sequence.size() % 2)
+       return false;
+
+   const size_t halfSize = sequence.size() / 2;
+   for (size_t i = 0; i < halfSize; ++i)
+       if (sequence[i] != sequence[i + halfSize])
+           return false;
+
+   return true;
+}

@@ -1,28 +1,20 @@
-#include <QCoreApplication>
-
-#include <QDebug>
+#include <iostream>
 
 #include "PrimeMusic.hpp"
 
 #include "NoteOperations.hpp"
 
 
-int main(int argc, char *argv[])
+int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
     PrimeMusic p(12, 3);
+    p.findPerfectCycle();
 
-    p.streightIterations(12);
+    p.setup(12, 5);
+    p.findPerfectCycle();
 
-    auto i1 = findClosestNote(441);
-    auto i2 = findClosestNote(439);
+    p.setup(12, 7);
+    p.findPerfectCycle();
 
-    qDebug() << i1.second << " " << i2.second;
-
-    auto closest = p.musicInterval();
-    qDebug() << closest.first << " " << closest.second;
-    qDebug() << nameMusicInterval(closest.first).c_str();
-
-
-    //QCoreApplication a(argc, argv);
     return 0;
 }
