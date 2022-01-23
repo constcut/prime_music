@@ -79,7 +79,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 
     std::cout << std::endl << "NOW *2 " << std::endl  << std::endl;
 
-    exploreCyclesAndIntervals(primeList, primesCount, 2);
+    exploreCyclesAndIntervals(primeList, primesCount, 5);
     //exploreWhenCycleBreaks(primeList, primesCount, 2);
     //exploreWhenCycleConverges(primeList, primesCount, 2);
 
