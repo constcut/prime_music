@@ -22,6 +22,7 @@ public:
     //Steps + cycles
     std::pair<int, long double> whenCycleBreaks(bool log = false);
 
+    //Steps + full cycles
     std::pair<int, long double> whenCycleConverges(bool log = false);
 
 private:
