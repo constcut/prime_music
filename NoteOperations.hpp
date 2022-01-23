@@ -16,11 +16,14 @@ double midiCents(const double f0, const double tuneFreq = 440.0,
 std::pair<int, double> findClosestNote(const double f0);
 
 
+std::string fullNameMidiNote(const int midiNote);
 std::string nameMidiNote(const int midiNote);
 
 
 double freqFromMidiNote(const int midiNote); //TODO tuneFreq for A4 or else
 
+
+std::string nameMusicInterval(const int semitones);
 
 
 #endif // NOTEOPERATIONS_HPP

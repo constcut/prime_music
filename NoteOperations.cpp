@@ -14,6 +14,23 @@ std::string noteNames[] = { "C", "C#", "D", "D#", "E", "F",
                             "F#", "G", "G#", "A", "A#", "B" };
 
 
+std::string musicIntervals[] = {"Perfect unison", "Minor second", "Major second", "Minor third", "Major third", "Perfect fourth",
+                                "Diminished fifth/Augmented fourth", "Perfect fifth", "Minor sixth", "Major sixth",
+                                "Minor seventh", "Major seventh", "Perfect octave" };
+
+
+
+std::string nameMusicInterval(const int semitones) {
+
+    if (semitones == 0)
+        return musicIntervals[0];
+    if (semitones % 12 == 0)
+        return musicIntervals[12];
+
+    return musicIntervals[semitones % 12];
+}
+
+
 double midiCents(const double f0, const double tuneFreq,
                                       const int midiTune)
 {
@@ -31,10 +48,16 @@ std::pair<int, double> findClosestNote(const double f0) {
 }
 
 
-std::string nameMidiNote(const int midiNote) {
+std::string fullNameMidiNote(const int midiNote) {
     const std::string key = noteNames[midiNote % 12]; //TODO subfunction note + octave as pair
     const int octaveNumber = (midiNote / 12) - 1;
     return key + std::to_string(octaveNumber);
+}
+
+
+std::string nameMidiNote(const int midiNote) {
+    const std::string key = noteNames[midiNote % 12];
+    return key;
 }
 
 

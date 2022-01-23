@@ -12,14 +12,16 @@ public:
 
     void setup(const int midiNote, double primeNumber);
 
-    void runIterations(size_t count);
+    void streightIterations(size_t count);
+
+    std::pair<int, double> musicInterval();
 
     //TODO calculate interval : interval idx or name + deviation in cents
 
 private:
 
     int _midiNote;
-    double _primeNumber;
+    double _primeNumber; //rename TODO just number
 
     std::vector<int> _noteSequence;
     std::vector<double> _centsSequece;

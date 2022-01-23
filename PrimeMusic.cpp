@@ -18,7 +18,7 @@ void PrimeMusic::setup(const int midiNote, double primeNumber) {
 }
 
 
-void PrimeMusic::runIterations(size_t count) {
+void PrimeMusic::streightIterations(size_t count) {
 
     double _currentFreq = freqFromMidiNote(_midiNote);
 
@@ -36,4 +36,15 @@ void PrimeMusic::runIterations(size_t count) {
         std::cout << i << ") freq= " << _currentFreq << " name= "
                   << noteName << " cents d= " << cents << std::endl;
     }
+}
+
+
+std::pair<int, double> PrimeMusic::musicInterval() {
+    const double basicFreq = freqFromMidiNote(_midiNote); //TOOD into noteopearions
+    const double nextMidiNote = midiCents(basicFreq * _primeNumber) / 100.0;
+    const double interval = nextMidiNote - _midiNote;
+
+    const double closestInterval = std::round(interval);
+    const double centsDeviation = (interval - closestInterval) * 100;
+    return {closestInterval, centsDeviation};
 }
