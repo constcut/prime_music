@@ -1,5 +1,6 @@
 #include <iostream>
 #include <unordered_map>
+#include <algorithm>
 
 #include "PrimeMusic.hpp"
 #include "NoteOperations.hpp"
@@ -75,9 +76,53 @@ std::vector<int> noteDiffVector(const std::vector<int>& lhs,
 
 
 std::vector<int> mostFrequentValues(const std::vector<int>& v) {
-    return {};
+    std::unordered_map<int, size_t> entries;
+
+    for (auto element: v) {
+        if (entries.count(element))
+            entries[element] += 1;
+        else
+            entries[element] = 1;
+    }
+
+    std::vector<std::pair<int,size_t>> sorted(entries.begin(), entries.end());
+    std::sort(sorted.begin(), sorted.end(), [](auto& lhs, auto& rhs){ return lhs.second > rhs.second;});
+
+    std::vector<int> mostFreq;
+    for (auto s: sorted)
+        mostFreq.push_back(s.first);
+
+    return mostFreq;
 }
 
+
+void explorePrimeProducts() {
+    auto basicIntervals = exploreCyclesAndIntervals(primeList, primesCount);
+
+    for (size_t i = 0; i < primesCount; ++i)
+    {
+        const int prime = primeList[i];
+        auto nextIntervals = exploreCyclesAndIntervals(primeList, primesCount, prime);
+        auto diffVector = noteDiffVector(nextIntervals, basicIntervals);
+        auto mostFreq = mostFrequentValues(diffVector);
+
+        int mostDiff = mostFreq[1] - mostFreq[0];
+        if (mostDiff == -11)
+            mostDiff = 1;
+
+        std::string expectationString;
+
+        if ((basicIntervals[i] % 12) == mostFreq[0])
+            expectationString = " Most frequent equal";
+        else if ((basicIntervals[i] % 12) == mostFreq[1])
+            expectationString = " Second frequent equal";
+        else
+            expectationString = " Something unexpected";
+
+        std::cout << prime << ") " << mostFreq[0] << " Total " << mostFreq.size() <<
+                  " Diff " << mostDiff << expectationString << std::endl;
+    }
+}
 
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
@@ -92,17 +137,31 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 
     auto basicIntervals = exploreCyclesAndIntervals(primeList, primesCount);
 
-    for (size_t i = 0; i < primesCount; ++i) {
+    const size_t multSize = 6;
+    int multProducts[multSize] = {15, 21, 33, 35, 39, 55};
 
-        const int prime = primeList[i];
-
-        auto nextIntervals = exploreCyclesAndIntervals(primeList, primesCount, prime);
+    for (size_t i = 0; i < multSize; ++i)
+    {
+        const int number = multProducts[i];
+        auto nextIntervals = exploreCyclesAndIntervals(primeList, primesCount, number);
         auto diffVector = noteDiffVector(nextIntervals, basicIntervals);
+        auto mostFreq = mostFrequentValues(diffVector);
 
-        std::cout << "For " << prime << " diff vector: " << std::endl;
-        for (auto d: diffVector)
-            std::cout << d << " ";
-        std::cout << std::endl <<  std::endl;
+        int mostDiff = mostFreq[1] - mostFreq[0];
+        if (mostDiff == -11)
+            mostDiff = 1;
+
+        std::string expectationString;
+
+        if ((basicIntervals[i] % 12) == mostFreq[0])
+            expectationString = " Most frequent equal";
+        else if ((basicIntervals[i] % 12) == mostFreq[1])
+            expectationString = " Second frequent equal";
+        else
+            expectationString = " Something unexpected";
+
+        std::cout << number << ") " << mostFreq[0] << " Total " << mostFreq.size() <<
+                  " Diff " << mostDiff << expectationString << std::endl;
     }
 
     return 0;
