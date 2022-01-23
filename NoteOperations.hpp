@@ -9,18 +9,18 @@
 //TODO enum for all MidiNote to avoid magic constants
 
 
-double midiCents(const double f0, const double tuneFreq = 440.0,
+long double midiCents(const long double f0, const long double tuneFreq = 440.0,
                                       const int midiTune = 69);
 
 //Returns pair: closes midi note + deviation in cents
-std::pair<int, double> findClosestNote(const double f0);
+std::pair<int, long double> findClosestNote(const long double f0);
 
 
 std::string fullNameMidiNote(const int midiNote);
 std::string nameMidiNote(const int midiNote);
 
 
-double freqFromMidiNote(const int midiNote); //TODO tuneFreq for A4 or else
+long double freqFromMidiNote(const int midiNote); //TODO tuneFreq for A4 or else
 
 
 std::string nameMusicInterval(const int semitones);
