@@ -8,11 +8,9 @@ const size_t primesCount = 28;
 int primeList [primesCount] = {3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53,
                     59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109 };
 
-const size_t doubledCount = 10;
-int doubledList [doubledCount] = {6, 10, 14, 22, 26, 34, 38, 46, 58, 62};
 
 
-void exploreCyclesAndIntervals(int* sequence, size_t len)
+void exploreCyclesAndIntervals(int* sequence, size_t len, int mult = 1)
 {
     PrimeMusic p;
     std::set<int> intervalsSet;
@@ -21,7 +19,7 @@ void exploreCyclesAndIntervals(int* sequence, size_t len)
     //3 and 5 generated 1-3-5 major intervals
 
     for (size_t i = 0; i < len; ++i) {
-        p.setup(sequence[i]);
+        p.setup(sequence[i] * mult);
         p.findPerfectCycle(true);
 
         const auto [interval, _] = p.musicInterval();
@@ -40,13 +38,13 @@ void exploreCyclesAndIntervals(int* sequence, size_t len)
 }
 
 
-void exploreWhenCycleBreaks(int* sequence, size_t len)
+void exploreWhenCycleBreaks(int* sequence, size_t len, int mult = 1)
 {
     PrimeMusic p;
 
     for (size_t i = 0; i < len; ++i) {
         std::cout << std::endl;
-        p.setup(sequence[i]);
+        p.setup(sequence[i] * mult);
         const auto [steps, cycles] = p.whenCycleBreaks(true);
 
         if (steps == 0)
@@ -55,13 +53,13 @@ void exploreWhenCycleBreaks(int* sequence, size_t len)
 }
 
 
-void exploreWhenCycleConverges(int* sequence, size_t len)
+void exploreWhenCycleConverges(int* sequence, size_t len, int mult = 1)
 {
     PrimeMusic p;
 
     for (size_t i = 0; i < len; ++i) {
         std::cout << std::endl;
-        p.setup(sequence[i]);
+        p.setup(sequence[i] * mult);
         const auto [steps, cycles] = p.whenCycleConverges(1., true);
 
         if (steps == 0)
@@ -75,13 +73,16 @@ void exploreWhenCycleConverges(int* sequence, size_t len)
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
-    //exploreCyclesAndIntervals(primeList, primesCount);
+    exploreCyclesAndIntervals(primeList, primesCount);
     //exploreWhenCycleBreaks(primeList, primesCount);
     //exploreWhenCycleConverges(primeList, primesCount);
 
-    exploreCyclesAndIntervals(doubledList, doubledCount);
-    exploreWhenCycleBreaks(primeList, doubledCount);
-    exploreWhenCycleConverges(primeList, doubledCount);
+    std::cout << std::endl << "NOW *2 " << std::endl  << std::endl;
+
+    exploreCyclesAndIntervals(primeList, primesCount, 2);
+    //exploreWhenCycleBreaks(primeList, primesCount, 2);
+    //exploreWhenCycleConverges(primeList, primesCount, 2);
+
 
     return 0;
 }
