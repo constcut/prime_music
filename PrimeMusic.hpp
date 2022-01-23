@@ -8,9 +8,9 @@ class PrimeMusic
 {
 public:
     PrimeMusic() = default;
-    PrimeMusic(const int midiNote, double primeNumber); //TODO midi note as second param and default value = 12
+    PrimeMusic(const double primeNumber, const int midiNote = 12); //TODO midi note as second param and default value = 12
 
-    void setup(const int midiNote, double primeNumber);
+    void setup(const double primeNumber, const int midiNote = 12);
 
     void streightIterations(size_t count);
 

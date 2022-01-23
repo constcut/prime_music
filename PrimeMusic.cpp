@@ -5,14 +5,14 @@
 #include "NoteOperations.hpp"
 
 
-PrimeMusic::PrimeMusic(const int midiNote, double primeNumber)
+PrimeMusic::PrimeMusic(const double primeNumber, const int midiNote)
     : _midiNote(midiNote),
       _primeNumber(primeNumber)
 {
 }
 
 
-void PrimeMusic::setup(const int midiNote, double primeNumber) {
+void PrimeMusic::setup(const double primeNumber, const int midiNote) {
     _midiNote = midiNote;
     _primeNumber = primeNumber;
 }
