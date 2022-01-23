@@ -59,7 +59,7 @@ void exploreWhenCycleConverges()
     for (size_t i = 0; i < primesCount; ++i) {
         std::cout << std::endl;
         p.setup(primeList[i]);
-        const auto [steps, cycles] = p.whenCycleConverges(true);
+        const auto [steps, cycles] = p.whenCycleConverges(1., true);
 
         if (steps == 0)
                 break;

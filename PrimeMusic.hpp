@@ -23,7 +23,7 @@ public:
     std::pair<int, long double> whenCycleBreaks(bool log = false);
 
     //Steps + full cycles
-    std::pair<int, long double> whenCycleConverges(bool log = false);
+    std::pair<int, long double> whenCycleConverges(long double epsCents = 1.0, bool log = false);
 
 private:
 

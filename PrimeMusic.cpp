@@ -122,7 +122,7 @@ std::pair<int, long double> PrimeMusic::whenCycleBreaks(bool log) {
 
 unsigned long prevPowOfTwo(unsigned long v)
 {
-    v--;
+    v--; //Black bit magic
     v |= v >> 1;
     v |= v >> 2;
     v |= v >> 4;
@@ -133,7 +133,7 @@ unsigned long prevPowOfTwo(unsigned long v)
 }
 
 
-std::pair<int, long double> PrimeMusic::whenCycleConverges(bool log) {
+std::pair<int, long double> PrimeMusic::whenCycleConverges(long double epsilaCents, bool log) {
 
     const int firstNote = _midiNote % 12;
     long double currentFreq = freqFromMidiNote(firstNote);
@@ -152,7 +152,7 @@ std::pair<int, long double> PrimeMusic::whenCycleConverges(bool log) {
         const int currentNote = newNote % 12;
         const int cyclePos = step % cycle.size();
 
-        if (std::abs(cents) < 10. && currentNote == firstNote && cyclePos == 0) {
+        if (std::abs(cents) < epsilaCents && currentNote == firstNote && cyclePos == 0) {
             if (log)
                 std::cout << "Converged! " << _primeNumber <<  " on step " << step << std::endl;
             converged = true;
