@@ -8,6 +8,9 @@ const size_t primesCount = 28;
 int primeList [primesCount] = {3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53,
                     59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109 };
 
+const size_t doubledCount = 10;
+int doubledList [doubledCount] = {6, 10, 14, 22, 26, 34, 38, 46, 58, 62};
+
 
 void exploreCyclesAndIntervals(int* sequence, size_t len)
 {
@@ -72,9 +75,13 @@ void exploreWhenCycleConverges(int* sequence, size_t len)
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
-    exploreCyclesAndIntervals(primeList, primesCount);
-    exploreWhenCycleBreaks(primeList, primesCount);
-    exploreWhenCycleConverges(primeList, primesCount);
+    //exploreCyclesAndIntervals(primeList, primesCount);
+    //exploreWhenCycleBreaks(primeList, primesCount);
+    //exploreWhenCycleConverges(primeList, primesCount);
+
+    exploreCyclesAndIntervals(doubledList, doubledCount);
+    exploreWhenCycleBreaks(primeList, doubledCount);
+    exploreWhenCycleConverges(primeList, doubledCount);
 
     return 0;
 }
