@@ -133,7 +133,7 @@ std::pair<int, double> PrimeMusic::whenCycleConverges(bool log) {
     const auto& cycle = findPerfectCycle();
 
     size_t steps = 0;
-    for (steps = 1; steps < 10000; ++steps) { //TODO steps limit in class
+    for (steps = 1; steps < 100000; ++steps) { //TODO steps limit in class
 
         currentFreq *= _primeNumber;
         //currentNote += (interval % 12); //ТУТ ошибка

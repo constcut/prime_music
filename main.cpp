@@ -37,8 +37,8 @@ void exploreCyclesAndIntervals()
 }
 
 
-void exploreWhenCycleBreaks() {
-
+void exploreWhenCycleBreaks()
+{
     PrimeMusic p;
 
     for (size_t i = 0; i < primesCount; ++i) {
@@ -52,15 +52,29 @@ void exploreWhenCycleBreaks() {
 }
 
 
+void exploreWhenCycleConverges()
+{
+    PrimeMusic p;
+
+    for (size_t i = 0; i < primesCount; ++i) {
+        std::cout << std::endl;
+        p.setup(primeList[i]);
+        const auto [steps, cycles] = p.whenCycleConverges(true);
+
+        if (steps == 0)
+                break;
+    }
+}
+
+//TODO new class PrimeMusicSequence - через init list - так же находить циклы итд
+
+
+
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
     //exploreCyclesAndIntervals();
     //exploreWhenCycleBreaks();
-
-    PrimeMusic p(3);
-    p.whenCycleConverges(true);
-    std::cout << std::endl;
-    p.findPerfectCycle(true);
+    exploreWhenCycleConverges();
 
     return 0;
 }
