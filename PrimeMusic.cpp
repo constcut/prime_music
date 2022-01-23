@@ -121,3 +121,45 @@ std::pair<int, double> PrimeMusic::whenCycleBreaks(bool log) {
 
     return {steps, fullCycles};
 }
+
+
+
+std::pair<int, double> PrimeMusic::whenCycleConverges(bool log) {
+
+    const auto [interval, centsDeviation] = musicInterval();
+
+    double cummulateError = 0.0;
+
+    const int firstNote = _midiNote % 12;
+    int currentNote = firstNote;
+
+    size_t steps = 0;
+    for (steps = 1; steps < 10000; ++steps) { //TODO steps limit in class
+
+        currentNote += (interval % 12);
+        currentNote %= 12;
+
+        cummulateError += std::abs(centsDeviation);
+
+        if (cummulateError >= 50.)
+            cummulateError -= 50.;
+
+        if (cummulateError < 1. && currentNote == firstNote) {
+
+            if (log)
+                std::cout << "Converged! on step " << steps << std::endl;
+
+            break;
+        }
+    }
+
+    const auto& cycle = findPerfectCycle();
+    double fullCycles = static_cast<double>(steps) / static_cast<double>(cycle.size());
+
+    if (log)
+        std::cout << "Full cycles " << fullCycles << std::endl;
+
+    return {steps, fullCycles};
+}
+
+

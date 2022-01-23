@@ -55,7 +55,10 @@ void exploreWhenCycleBreaks() {
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
     //exploreCyclesAndIntervals();
-    exploreWhenCycleBreaks();
+    //exploreWhenCycleBreaks();
+
+    PrimeMusic p(3);
+    p.whenCycleConverges(true);
 
     return 0;
 }

@@ -22,6 +22,8 @@ public:
     //Steps + cycles
     std::pair<int, double> whenCycleBreaks(bool log = false);
 
+    std::pair<int, double> whenCycleConverges(bool log = false);
+
 private:
 
     int _midiNote = 12;
