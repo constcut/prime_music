@@ -7,14 +7,14 @@
 
 PrimeMusic::PrimeMusic(const long double primeNumber, const int midiNote)
     : _midiNote(midiNote),
-      _primeNumber(primeNumber)
+      _number(primeNumber)
 {
 }
 
 
 void PrimeMusic::setup(const long double primeNumber, const int midiNote) {
     _midiNote = midiNote;
-    _primeNumber = primeNumber;
+    _number = primeNumber;
 }
 
 
@@ -25,7 +25,7 @@ void PrimeMusic::streightIterations(size_t count) {
     for (size_t i = 0; i < count; ++i)
     {
         if (i)
-            _currentFreq *= _primeNumber;
+            _currentFreq *= _number;
 
         auto [midiNote, cents] = findClosestNote(_currentFreq);
 
@@ -39,7 +39,7 @@ void PrimeMusic::streightIterations(size_t count) {
 
 std::pair<int, long double> PrimeMusic::musicInterval() {
     const long double basicFreq = freqFromMidiNote(_midiNote); //TOOD into noteopearions
-    const long double nextMidiNote = midiCents(basicFreq * _primeNumber) / 100.0;
+    const long double nextMidiNote = midiCents(basicFreq * _number) / 100.0;
     const long double interval = nextMidiNote - _midiNote;
 
     const long double closestInterval = std::round(interval);
@@ -66,7 +66,7 @@ const std::vector<int>& PrimeMusic::findPerfectCycle(bool log) {
                                     keyNotes.begin() + keyNotes.size()/2);
 
     if (log) {
-        std::cout << "Perfect cycle for " << _primeNumber << " interval "
+        std::cout << "Perfect cycle for " << _number << " interval "
                   << interval % 12 << " " << nameMusicInterval(interval % 12) << std::endl;
 
         for (int midiNote: _perfectCycle)
@@ -113,7 +113,7 @@ std::pair<int, long double> PrimeMusic::whenCycleBreaks(bool log) {
     long double fullCycles = static_cast<long double>(steps) / static_cast<long double>(cycle.size());
 
     if (log) {
-        std::cout << "For " << _primeNumber << " cycle breaks on " << steps << " steps" << std::endl;
+        std::cout << "For " << _number << " cycle breaks on " << steps << " steps" << std::endl;
         std::cout << "Full cycles " << fullCycles << std::endl;
     }
 
@@ -141,12 +141,12 @@ std::pair<int, long double> PrimeMusic::whenCycleConverges(long double epsilaCen
     const auto& cycle = findPerfectCycle();
 
     bool converged = false;
-    long double prevPow = prevPowOfTwo(_primeNumber);
+    long double prevPow = prevPowOfTwo(_number);
 
     size_t step = 0;
     for (step = 1; step < interationsLimit; ++step) {
 
-        currentFreq *= _primeNumber;
+        currentFreq *= _number;
         currentFreq /= prevPow; //Trick to decrease growth
 
         const auto [newNote, cents] = findClosestNote(currentFreq);
@@ -155,7 +155,7 @@ std::pair<int, long double> PrimeMusic::whenCycleConverges(long double epsilaCen
 
         if (std::abs(cents) < epsilaCents && currentNote == firstNote && cyclePos == 0) {
             if (log)
-                std::cout << "Converged! " << _primeNumber <<  " on step " << step << std::endl;
+                std::cout << "Converged! " << _number <<  " on step " << step << std::endl;
             converged = true;
             break;
         }
@@ -164,7 +164,7 @@ std::pair<int, long double> PrimeMusic::whenCycleConverges(long double epsilaCen
 
     if (converged == false) {
         const auto [newNote, cents] = findClosestNote(currentFreq);
-        std::cout << "Failed to converge " << _primeNumber << " last cents " << cents <<
+        std::cout << "Failed to converge " << _number << " last cents " << cents <<
                 std::endl;
     }
 

@@ -25,6 +25,20 @@ std::vector<int> exploreCyclesAndIntervals(int* sequence, size_t len,
 }
 
 
+std::vector<double> exploreCents(int* sequence, size_t len,
+                                    int mult = 1)
+{
+    PrimeMusic p;
+    std::vector<double> intervals;
+    for (size_t i = 0; i < len; ++i) {
+        p.setup(sequence[i] * mult);
+        const auto [_, cents] = p.musicInterval();
+        intervals.push_back(cents);
+    }
+    return intervals;
+}
+
+
 std::vector<std::pair<int, double>> exploreWhenCycleBreaks(int* sequence,
                                     size_t len, int mult = 1, bool log = false)
 {
@@ -40,18 +54,17 @@ std::vector<std::pair<int, double>> exploreWhenCycleBreaks(int* sequence,
 }
 
 
-void exploreWhenCycleConverges(int* sequence, size_t len, int mult = 1)
+std::vector<std::pair<int, double>> exploreWhenCycleConverges(int* sequence, size_t len, int mult = 1, bool log = false)
 {
     PrimeMusic p;
+    std::vector<std::pair<int, double>> convPoints;
 
     for (size_t i = 0; i < len; ++i) {
-        std::cout << std::endl;
         p.setup(sequence[i] * mult);
-        const auto [steps, cycles] = p.whenCycleConverges(1., true);
-
-        if (steps == 0)
-                break;
+        convPoints.push_back(p.whenCycleConverges(1., log));
     }
+
+    return convPoints;
 }
 
 //TODO new class PrimeMusicSequence - через init list - так же находить циклы итд
@@ -145,18 +158,7 @@ void exploreMultiProducts() {
 }
 
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
-{
-    //exploreCyclesAndIntervals(primeList, primesCount);
-    //exploreWhenCycleBreaks(primeList, primesCount);
-    //exploreWhenCycleConverges(primeList, primesCount);
-
-    //exploreCyclesAndIntervals(primeList, primesCount, 5);
-    //exploreWhenCycleBreaks(primeList, primesCount, 2);
-    //exploreWhenCycleConverges(primeList, primesCount, 2);
-
-    //exploreMultiProducts();
-
+void exploreCycleBreakOnMult() {
     auto usual = exploreWhenCycleBreaks(primeList, primesCount, 1);
     auto mult = exploreWhenCycleBreaks(primeList, primesCount, 3);
 
@@ -166,6 +168,42 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
         std::cout << primeList[i] * 3 << ") " << mult[i].first << " "
                   << mult[i].second << std::endl;
 
+        std::cout << std::endl;
+    }
+}
+
+void exploreCycleCoverageOnMult() {
+    auto usual = exploreWhenCycleConverges(primeList, primesCount, 1);
+    auto mult = exploreWhenCycleConverges(primeList, primesCount, 3);
+
+    for (size_t i = 0; i < usual.size(); ++i) {
+        std::cout << primeList[i] << ") " << usual[i].first << " "
+                  << usual[i].second << std::endl;
+        std::cout << primeList[i] * 3 << ") " << mult[i].first << " "
+                  << mult[i].second << std::endl;
+
+        std::cout << std::endl;
+    }
+}
+
+
+int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
+{
+
+    //exploreCycleBreakOnMult(); // TODO unfinished - no conculsion was done
+    //exploreCycleCoverageOnMult(); // TODO unfinished - no conculsion was done
+
+    auto usual = exploreCents(primeList, primesCount, 1);
+    auto mult = exploreCents(primeList, primesCount, 3);
+    auto multNext = exploreCents(primeList, primesCount, 3*3);
+
+
+    for (size_t i = 0; i < usual.size(); ++i) {
+        std::cout << primeList[i] << ") " << usual[i] << std::endl;
+        std::cout << primeList[i] * 3 << ") " << mult[i] << " _ "
+                     << mult[i]  - usual[i] << std::endl;
+        std::cout << primeList[i] * 3 * 3 << ") " << multNext[i] << " _ "
+                  << multNext[i]  - usual[i] <<  " _ " << multNext[i]  - mult[i] << std::endl;
         std::cout << std::endl;
     }
 

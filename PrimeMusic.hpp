@@ -28,7 +28,7 @@ public:
 private:
 
     int _midiNote = 12;
-    long double _primeNumber = 2.0; //rename TODO just number
+    long double _number = 2.0; //rename TODO just number
 
     const size_t interationsLimit = 2'000'000;
 
