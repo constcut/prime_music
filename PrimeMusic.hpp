@@ -20,8 +20,8 @@ public:
 
 private:
 
-    int _midiNote;
-    double _primeNumber; //rename TODO just number
+    int _midiNote = 12;
+    double _primeNumber = 2.0; //rename TODO just number
 
     std::vector<int> _noteSequence;
     std::vector<double> _centsSequece;
