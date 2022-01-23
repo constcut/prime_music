@@ -22,11 +22,11 @@ double midiCents(const double f0, const double tuneFreq,
 }
 
 
-std::pair<double, double> findClosestNote(const double f0) {
+std::pair<int, double> findClosestNote(const double f0) {
     const double cents = midiCents(f0);
     const double midiNote = cents / 100.0;
-    const double closestNote = std::round(midiNote);
-    const double centsDeviation = (midiNote - closestNote) * 100.0;
+    const long double closestNote = std::round(midiNote);
+    const long double centsDeviation = (midiNote - closestNote) * 100.0;
     return {closestNote, centsDeviation};
 }
 

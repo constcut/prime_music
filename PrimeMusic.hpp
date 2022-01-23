@@ -14,6 +14,8 @@ public:
 
     void runIterations(size_t count);
 
+    //TODO calculate interval : interval idx or name + deviation in cents
+
 private:
 
     int _midiNote;

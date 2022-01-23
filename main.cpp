@@ -2,19 +2,16 @@
 
 #include <QDebug>
 
-#include "NoteOperations.hpp"
-
+#include "PrimeMusic.hpp"
 
 
 int main(int argc, char *argv[])
 {
+    PrimeMusic p(12, 3);
 
-    auto p = findClosestNote(441.0);
-    qDebug() << p.first << " " << p.second;
-    qDebug() << "Name " << nameMidiNote(69).c_str();
+    p.runIterations(12);
 
-    qDebug() << "Freq from note " << freqFromMidiNote(12) << " " << freqFromMidiNote(69);
 
-    QCoreApplication a(argc, argv);
-    return a.exec();
+    //QCoreApplication a(argc, argv);
+    return 0;
 }
