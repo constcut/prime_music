@@ -125,6 +125,25 @@ void explorePrimeProducts() {
 }
 
 
+void exploreMultiProducts() {
+    auto basicIntervals = exploreCyclesAndIntervals(primeList, primesCount);
+
+    const size_t multSize = 6; //3
+    int multProducts[multSize] = {15, 21, 33, 35, 39, 55};
+    //int multProducts[multSize] = {9, 25, 49};
+
+    for (size_t i = 0; i < multSize; ++i)
+    {
+        const int number = multProducts[i];
+        auto nextIntervals = exploreCyclesAndIntervals(primeList, primesCount, number);
+        auto diffVector = noteDiffVector(nextIntervals, basicIntervals);
+        auto mostFreq = mostFrequentValues(diffVector);
+
+        std::cout << number << ") " << mostFreq[0] << " " << mostFreq[1] << std::endl;
+    }
+}
+
+
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
     //exploreCyclesAndIntervals(primeList, primesCount);
@@ -135,34 +154,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
     //exploreWhenCycleBreaks(primeList, primesCount, 2);
     //exploreWhenCycleConverges(primeList, primesCount, 2);
 
-    auto basicIntervals = exploreCyclesAndIntervals(primeList, primesCount);
-
-    const size_t multSize = 6;
-    int multProducts[multSize] = {15, 21, 33, 35, 39, 55};
-
-    for (size_t i = 0; i < multSize; ++i)
-    {
-        const int number = multProducts[i];
-        auto nextIntervals = exploreCyclesAndIntervals(primeList, primesCount, number);
-        auto diffVector = noteDiffVector(nextIntervals, basicIntervals);
-        auto mostFreq = mostFrequentValues(diffVector);
-
-        int mostDiff = mostFreq[1] - mostFreq[0];
-        if (mostDiff == -11)
-            mostDiff = 1;
-
-        std::string expectationString;
-
-        if ((basicIntervals[i] % 12) == mostFreq[0])
-            expectationString = " Most frequent equal";
-        else if ((basicIntervals[i] % 12) == mostFreq[1])
-            expectationString = " Second frequent equal";
-        else
-            expectationString = " Something unexpected";
-
-        std::cout << number << ") " << mostFreq[0] << " Total " << mostFreq.size() <<
-                  " Diff " << mostDiff << expectationString << std::endl;
-    }
+    //exploreMultiProducts();
 
     return 0;
 }
