@@ -9,7 +9,7 @@ int primeList [primesCount] = {3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 
                     59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109 };
 
 
-void exploreCyclesAndIntervals()
+void exploreCyclesAndIntervals(int* sequence, size_t len)
 {
     PrimeMusic p;
     std::set<int> intervalsSet;
@@ -17,8 +17,8 @@ void exploreCyclesAndIntervals()
     //Just a reminded 2 generated all perfect harmonics
     //3 and 5 generated 1-3-5 major intervals
 
-    for (size_t i = 0; i < primesCount; ++i) {
-        p.setup(primeList[i]);
+    for (size_t i = 0; i < len; ++i) {
+        p.setup(sequence[i]);
         p.findPerfectCycle(true);
 
         const auto [interval, _] = p.musicInterval();
@@ -37,13 +37,13 @@ void exploreCyclesAndIntervals()
 }
 
 
-void exploreWhenCycleBreaks()
+void exploreWhenCycleBreaks(int* sequence, size_t len)
 {
     PrimeMusic p;
 
-    for (size_t i = 0; i < primesCount; ++i) {
+    for (size_t i = 0; i < len; ++i) {
         std::cout << std::endl;
-        p.setup(primeList[i]);
+        p.setup(sequence[i]);
         const auto [steps, cycles] = p.whenCycleBreaks(true);
 
         if (steps == 0)
@@ -52,13 +52,13 @@ void exploreWhenCycleBreaks()
 }
 
 
-void exploreWhenCycleConverges()
+void exploreWhenCycleConverges(int* sequence, size_t len)
 {
     PrimeMusic p;
 
-    for (size_t i = 0; i < primesCount; ++i) {
+    for (size_t i = 0; i < len; ++i) {
         std::cout << std::endl;
-        p.setup(primeList[i]);
+        p.setup(sequence[i]);
         const auto [steps, cycles] = p.whenCycleConverges(1., true);
 
         if (steps == 0)
@@ -72,9 +72,9 @@ void exploreWhenCycleConverges()
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
-    //exploreCyclesAndIntervals();
-    //exploreWhenCycleBreaks();
-    exploreWhenCycleConverges();
+    exploreCyclesAndIntervals(primeList, primesCount);
+    exploreWhenCycleBreaks(primeList, primesCount);
+    exploreWhenCycleConverges(primeList, primesCount);
 
     return 0;
 }
