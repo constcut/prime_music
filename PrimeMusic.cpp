@@ -50,7 +50,7 @@ std::pair<int, double> PrimeMusic::musicInterval() {
 }
 
 
-const std::vector<int>& PrimeMusic::findPerfectCycle() {
+const std::vector<int>& PrimeMusic::findPerfectCycle(bool log) {
 
     std::vector<int> keyNotes {_midiNote % 12 };
 
@@ -68,12 +68,15 @@ const std::vector<int>& PrimeMusic::findPerfectCycle() {
     _perfectCycle = std::vector<int>(keyNotes.begin(),
                                     keyNotes.begin() + keyNotes.size()/2);
 
-    std::cout << "Perfect cycle for " << _primeNumber << " interval " << interval % 12 << std::endl;
+    if (log) {
+        std::cout << "Perfect cycle for " << _primeNumber << " interval "
+                  << interval % 12 << " " << nameMusicInterval(interval % 12) << std::endl;
 
-    for (int midiNote: _perfectCycle)
-        std::cout << nameMidiNote(midiNote) << " ";
+        for (int midiNote: _perfectCycle)
+            std::cout << nameMidiNote(midiNote) << " ";
 
-    std::cout << std::endl << "Cycle length: " << _perfectCycle.size() << std::endl;
+        std::cout << std::endl << "Cycle length: " << _perfectCycle.size() << std::endl;
+    }
 
     return _perfectCycle;
 }
@@ -89,4 +92,32 @@ bool PrimeMusic::gotCycle(const std::vector<int>& sequence) {
            return false;
 
    return true;
+}
+
+
+std::pair<int, double> PrimeMusic::whenCycleBreaks(bool log) {
+    const auto [_, centsDeviation] = musicInterval();
+
+    if (log)
+        std::cout << "Cents deviation: " << centsDeviation << std::endl;
+
+    const auto& cycle = findPerfectCycle();
+
+    double cummulateError = 0.0;
+    size_t steps;
+
+    for (steps = 1; steps < 100; ++steps) {
+        cummulateError += std::abs(centsDeviation);
+        if (cummulateError > 50.0)
+            break;
+    }
+
+    double fullCycles = static_cast<double>(steps) / static_cast<double>(cycle.size());
+
+    if (log) {
+        std::cout << "For " << _primeNumber << " cycle breaks on " << steps << " steps" << std::endl;
+        std::cout << "Full cycles " << fullCycles << std::endl;
+    }
+
+    return {steps, fullCycles};
 }

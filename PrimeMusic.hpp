@@ -14,9 +14,13 @@ public:
 
     void streightIterations(size_t count);
 
+    //Semitones + cents deviation
     std::pair<int, double> musicInterval();
 
-    const std::vector<int>& findPerfectCycle();
+    const std::vector<int>& findPerfectCycle(bool log = false);
+
+    //Steps + cycles
+    std::pair<int, double> whenCycleBreaks(bool log = false);
 
 private:
 

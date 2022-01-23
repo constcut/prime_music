@@ -4,8 +4,8 @@
 #include "PrimeMusic.hpp"
 #include "NoteOperations.hpp"
 
-
-int primeList [] = {3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53,
+const size_t primesCount = 28;
+int primeList [primesCount] = {3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53,
                     59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109 };
 
 
@@ -14,9 +14,12 @@ void exploreCyclesAndIntervals()
     PrimeMusic p;
     std::set<int> intervalsSet;
 
-    for (size_t i = 0; i < sizeof(primeList); ++i) {
+    //Just a reminded 2 generated all perfect harmonics
+    //3 and 5 generated 1-3-5 major intervals
+
+    for (size_t i = 0; i < primesCount; ++i) {
         p.setup(primeList[i]);
-        p.findPerfectCycle();
+        p.findPerfectCycle(true);
 
         const auto [interval, _] = p.musicInterval();
         intervalsSet.insert(interval % 12);
@@ -34,9 +37,25 @@ void exploreCyclesAndIntervals()
 }
 
 
+void exploreWhenCycleBreaks() {
+
+    PrimeMusic p;
+
+    for (size_t i = 0; i < primesCount; ++i) {
+        std::cout << std::endl;
+        p.setup(primeList[i]);
+        const auto [steps, cycles] = p.whenCycleBreaks(true);
+
+        if (steps == 0)
+                break;
+    }
+}
+
+
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
-    exploreCyclesAndIntervals();
+    //exploreCyclesAndIntervals();
+    exploreWhenCycleBreaks();
 
     return 0;
 }
