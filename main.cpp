@@ -10,7 +10,8 @@ int primeList [primesCount] = {3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 
 
 
 
-std::vector<int> exploreCyclesAndIntervals(int* sequence, size_t len, int mult = 1, bool log = false)
+std::vector<int> exploreCyclesAndIntervals(int* sequence, size_t len,
+                                           int mult = 1, bool log = false)
 {
     PrimeMusic p;
     std::vector<int> intervals;
@@ -24,18 +25,18 @@ std::vector<int> exploreCyclesAndIntervals(int* sequence, size_t len, int mult =
 }
 
 
-void exploreWhenCycleBreaks(int* sequence, size_t len, int mult = 1)
+std::vector<std::pair<int, double>> exploreWhenCycleBreaks(int* sequence,
+                                    size_t len, int mult = 1, bool log = false)
 {
     PrimeMusic p;
+    std::vector<std::pair<int, double>> breakPoints;
 
     for (size_t i = 0; i < len; ++i) {
-        std::cout << std::endl;
         p.setup(sequence[i] * mult);
-        const auto [steps, cycles] = p.whenCycleBreaks(true);
-
-        if (steps == 0)
-                break;
+        breakPoints.push_back(p.whenCycleBreaks(log));
     }
+
+    return breakPoints;
 }
 
 
@@ -155,6 +156,18 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
     //exploreWhenCycleConverges(primeList, primesCount, 2);
 
     //exploreMultiProducts();
+
+    auto usual = exploreWhenCycleBreaks(primeList, primesCount, 1);
+    auto mult = exploreWhenCycleBreaks(primeList, primesCount, 3);
+
+    for (size_t i = 0; i < usual.size(); ++i) {
+        std::cout << primeList[i] << ") " << usual[i].first << " "
+                  << usual[i].second << std::endl;
+        std::cout << primeList[i] * 3 << ") " << mult[i].first << " "
+                  << mult[i].second << std::endl;
+
+        std::cout << std::endl;
+    }
 
     return 0;
 }

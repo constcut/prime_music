@@ -93,6 +93,7 @@ bool PrimeMusic::gotCycle(const std::vector<int>& sequence) {
 
 
 std::pair<int, long double> PrimeMusic::whenCycleBreaks(bool log) {
+
     const auto [_, centsDeviation] = musicInterval();
 
     if (log)
