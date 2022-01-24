@@ -109,17 +109,19 @@ std::vector<int> findPerfectCycle(int midiNote, double first, double second) { /
 
 
 
-std::vector<int> findPerfectCycleIntervals(int midiNote, int first, int second) { //TODO init list
+std::vector<int> findPerfectCycleIntervals(int midiNote, int first, int second, int third) { //TODO init list
 
     std::vector<int> keyNotes {midiNote % 12 };
 
     int currentNote = midiNote;
     for (size_t i = 1; i < 100000; ++i) {
 
-        if (i % 2)
+        if (i % 3 == 1)
             currentNote += first;
-        if (i % 2 == 0)
+        if (i % 3 == 2)
             currentNote += second;
+        if (i % 3 == 0)
+            currentNote += third;
 
         keyNotes.push_back(currentNote % 12);
         if (gotCycle(keyNotes))
@@ -146,18 +148,50 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) ///TODO эт�
         std::cout << primeList[i] << ")" << x[i] << " " << x[i] % 12 << std::endl;*/
 
 
+    size_t count = 0;
+
+    size_t kCount = 0;
+
     for (size_t i = 1; i < 12; ++i) {
-        for (size_t j = 1; j < 12; ++j) {
-            std::cout << std::endl << " " << i << " + " << j << " sum  " << i + j << std::endl;
-            auto cycle = findPerfectCycleIntervals(12, i, j);
-            for (auto v: cycle)
-                std::cout << v << ", ";
-            std::cout << std::endl;
-            std::cout << cycle.size() << std::endl;
+
+        bool hadOnce = false;
+
+        for (size_t j = i + 1; j < 12; ++j) {
+
+
+
+            for (size_t k = j + 1; k < 12; ++k) {
+
+                ++count;
+
+                hadOnce = true;
+                /*std::cout << std::endl << " " << i << " + " << j << " + " << k
+                          << " sum  " << i + j + k << std::endl;*/
+
+                auto cycle = findPerfectCycleIntervals(12, i, j, k);
+
+                std::cout << "{\"circles\": [{\"digits\":[";
+                for (size_t idx = 0; idx < cycle.size(); idx++) {
+                    std::cout << cycle[idx];
+                    if (idx != cycle.size() - 1)
+                        std::cout << ", ";
+                }
+                std::cout << "],\"scale\":13}]},";
+                std::cout << std::endl;
+                //std::cout << cycle.size() << std::endl;
+            }
+
+
+        }
+
+        if (hadOnce) {
+            std::cout << std::endl << "J BREAK i = " << i << std::endl;
+            ++kCount;
         }
     }
 
-
+    std::cout << std::endl << "TOTAL " << count <<
+               " and " << kCount << std::endl;
 
 
     return 0;
