@@ -81,12 +81,12 @@ bool gotCycle(const std::vector<int>& sequence) {
 }
 
 
-std::vector<int> findPerfectCycle(int midiNote) {
+std::vector<int> findPerfectCycle(int midiNote, double first, double second) { //TODO init list
 
     std::vector<int> keyNotes {midiNote % 12 };
 
-    const auto [interval1, _] = musicInterval(midiNote, 3);
-    const auto [interval2, __] = musicInterval(midiNote, 5);
+    const auto [interval1, _] = musicInterval(midiNote, first);
+    const auto [interval2, __] = musicInterval(midiNote, second);
 
     int currentNote = midiNote;
     for (size_t i = 1; i < 100000; ++i) {
@@ -120,10 +120,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) ///TODO эт�
     for (size_t i = 0; i < 10; ++i)
         std::cout << primeList[i] << ")" << x[i] << " " << x[i] % 12 << std::endl;*/
 
-    auto cycle = findPerfectCycle(12);
+    auto cycle = findPerfectCycle(12, 11, 13);
 
     for (auto v: cycle) {
-        std::cout << v << " ";
+        std::cout << v << ", ";
     }
     std::cout << std::endl;
     std::cout << cycle.size() << std::endl;
