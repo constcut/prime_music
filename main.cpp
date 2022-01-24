@@ -4,6 +4,7 @@
 
 #include "PrimeMusic.hpp"
 #include "NoteOperations.hpp"
+#include "Experiments.hpp"
 
 
 std::vector<int> primeList = { 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
@@ -32,21 +33,100 @@ std::vector<int> primeList = { 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 
 
 void printPrimeIntervals(const std::vector<int>& sequence) {
     for (size_t i = 0; i < sequence.size(); ++i) {
-        const long double semitones = 12 * std::log2(
+
+        const int edo = 19;
+
+        const long double semitones = edo * std::log2(
                     static_cast<long double>(sequence[i]));
         const uint32_t closestSemitones = std::round(semitones);
         const long double cents = (semitones - closestSemitones) * 100.0;
 
-        std::cout << sequence[i] << ", " << closestSemitones << ", "
-                  << closestSemitones % 12 << ", " << cents << std::endl;
+        std::cout << sequence[i] << ", "
+                  << closestSemitones << ", "
+                  << closestSemitones % edo << ", "
+                  << cents
+                  << std::endl;
     }
 }
+
+
+//Посчитать интервалы найти приближение в виде простое делённое на 2 в степени, где разница будет меньше цента
+//Меньше десятой цента
+
+//Но наверное всё это не очень интересно
+
+//Интересна сходимость, написать разные варианты, когда нота содержится всегда в 1 октаве или больше
+
+std::pair<int, long double> musicInterval(int midiNote, double number) {
+    const long double basicFreq = freqFromMidiNote(midiNote); //TOOD into noteopearions
+    const long double nextMidiNote = midiCents(basicFreq * number) / 100.0;
+    const long double interval = nextMidiNote - midiNote;
+
+    const long double closestInterval = std::round(interval);
+    const long double centsDeviation = (interval - closestInterval) * 100;
+    return {closestInterval, centsDeviation};
+}
+
+
+bool gotCycle(const std::vector<int>& sequence) {
+   if (sequence.size() % 2)
+       return false;
+
+   const size_t halfSize = sequence.size() / 2;
+   for (size_t i = 0; i < halfSize; ++i)
+       if (sequence[i] != sequence[i + halfSize])
+           return false;
+
+   return true;
+}
+
+
+std::vector<int> findPerfectCycle(int midiNote) {
+
+    std::vector<int> keyNotes {midiNote % 12 };
+
+    const auto [interval1, _] = musicInterval(midiNote, 3);
+    const auto [interval2, __] = musicInterval(midiNote, 5);
+
+    int currentNote = midiNote;
+    for (size_t i = 1; i < 100000; ++i) {
+
+        if (i % 2)
+            currentNote += interval1;
+        if (i % 2 == 0)
+            currentNote += interval2;
+
+        keyNotes.push_back(currentNote % 12);
+        if (gotCycle(keyNotes))
+            break;
+    }
+
+    std::vector<int> perfectCycle = std::vector<int>(keyNotes.begin(),
+                                    keyNotes.begin() + keyNotes.size()/2);
+
+    return perfectCycle;
+}
+
+
 
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) ///TODO эта функия будет просто как пример, офрмить в виде библиотеки
 {
 
-    printPrimeIntervals(primeList);
+    //printPrimeIntervals(primeList);
+
+    /*
+    auto x = exploreCyclesAndIntervals(primeList);
+    for (size_t i = 0; i < 10; ++i)
+        std::cout << primeList[i] << ")" << x[i] << " " << x[i] % 12 << std::endl;*/
+
+    auto cycle = findPerfectCycle(12);
+
+    for (auto v: cycle) {
+        std::cout << v << " ";
+    }
+    std::cout << std::endl;
+    std::cout << cycle.size() << std::endl;
 
     return 0;
 }

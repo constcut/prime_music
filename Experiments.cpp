@@ -1,12 +1,12 @@
 #include "Experiments.hpp"
+#include "PrimeMusic.hpp"
 
-/*
-std::vector<int> exploreCyclesAndIntervals(int* sequence, size_t len,
-                                           int mult = 1, bool log = false)
+std::vector<int> exploreCyclesAndIntervals(const std::vector<int>& sequence,
+                                           int mult, bool log)
 {
     PrimeMusic p;
     std::vector<int> intervals;
-    for (size_t i = 0; i < len; ++i) {
+    for (size_t i = 0; i < sequence.size(); ++i) {
         p.setup(sequence[i] * mult);
         p.findPerfectCycle(log);
         const auto [interval, _] = p.musicInterval();
@@ -15,6 +15,7 @@ std::vector<int> exploreCyclesAndIntervals(int* sequence, size_t len,
     return intervals;
 }
 
+/*
 
 std::vector<double> exploreCents(int* sequence, size_t len,
                                     int mult = 1)
