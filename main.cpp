@@ -160,11 +160,11 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) ///TODO эт�
 
         bool hadOnce = false;
 
-        for (size_t j = i + 1; j < 12; ++j) {
+        for (size_t j = 1; j < 12; ++j) {
 
 
 
-            for (size_t k = j + 1; k < 12; ++k) {
+            for (size_t k = 1; k < 12; ++k) {
 
                 MidiTrack track;
                 track.pushChangeBPM(240, 0); //somehow 240 is almost! realtime
@@ -179,15 +179,29 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) ///TODO эт�
                 auto cycle = findPerfectCycleIntervals(12, i, j, k);
 
                 std::cout << "{\"circles\": [{\"digits\":[";
-                for (size_t idx = 0; idx < cycle.size(); idx++) {
+                for (size_t idx = 0; idx < cycle.size() ; idx++) {
 
                     std::cout << cycle[idx];
                     if (idx != cycle.size() - 1)
                         std::cout << ", ";
 
+                    track.pushNoteOn(48 + cycle[idx], 100, 0);
+                    track.accumulate(500);
+                    track.pushNoteOff(48 + cycle[idx], 100, 0);
+                }
+
+                for (size_t idx = 0; idx < cycle.size() ; idx++) {
                     track.pushNoteOn(36 + cycle[idx], 100, 0);
                     track.accumulate(500);
                     track.pushNoteOff(36 + cycle[idx], 100, 0);
+                }
+
+                for (size_t idx = 0; idx < cycle.size() ; idx++) {
+                    track.pushNoteOn(36 + cycle[idx], 100, 0);
+                    track.pushNoteOn(48 + cycle[idx], 100, 0);
+                    track.accumulate(500);
+                    track.pushNoteOff(36 + cycle[idx], 100, 0);
+                    track.pushNoteOff(48 + cycle[idx], 100, 0);
                 }
                 std::cout << "],\"scale\":13}]},";
                 std::cout << std::endl;
