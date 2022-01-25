@@ -11,7 +11,13 @@ SOURCES += \
         Experiments.cpp \
         NoteOperations.cpp \
         PrimeMusic.cpp \
-        main.cpp
+        libs/sf/tsf.cpp \
+        main.cpp \
+        midi/MidiFile.cpp \
+        midi/MidiMessage.cpp \
+        midi/MidiRender.cpp \
+        midi/MidiTrack.cpp \
+        midi/NBytesInt.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -21,4 +27,17 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     Experiments.hpp \
     NoteOperations.hpp \
-    PrimeMusic.hpp
+    PrimeMusic.hpp \
+    libs/sf/tml.h \
+    libs/sf/tsf.h \
+    log.hpp \
+    midi/MidiFile.hpp \
+    midi/MidiMessage.hpp \
+    midi/MidiRender.hpp \
+    midi/MidiTrack.hpp \
+    midi/MidiUtils.hpp \
+    midi/NBytesInt.hpp
+
+DISTFILES += \
+    libs/sf/LICENSE \
+    libs/sf/README.md

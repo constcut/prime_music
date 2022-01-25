@@ -6,6 +6,10 @@
 #include "NoteOperations.hpp"
 #include "Experiments.hpp"
 
+#include "midi/MidiFile.hpp"
+
+using namespace aural_sight;
+
 
 std::vector<int> primeList = { 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
                                73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157,
@@ -162,6 +166,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) ///TODO эт�
 
             for (size_t k = j + 1; k < 12; ++k) {
 
+                MidiTrack track;
+                track.pushChangeBPM(240, 0); //somehow 240 is almost! realtime
+
+
                 ++count;
 
                 hadOnce = true;
@@ -172,13 +180,30 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) ///TODO эт�
 
                 std::cout << "{\"circles\": [{\"digits\":[";
                 for (size_t idx = 0; idx < cycle.size(); idx++) {
+
                     std::cout << cycle[idx];
                     if (idx != cycle.size() - 1)
                         std::cout << ", ";
+
+                    track.pushNoteOn(36 + cycle[idx], 100, 0);
+                    track.accumulate(500);
+                    track.pushNoteOff(36 + cycle[idx], 100, 0);
                 }
                 std::cout << "],\"scale\":13}]},";
                 std::cout << std::endl;
                 //std::cout << cycle.size() << std::endl;
+
+                track.pushEvent47();
+
+                MidiFile midi;
+                midi.push_back(track);
+                std::string filename = std::to_string(i) + "+" + std::to_string(j) + "+" +
+                            std::to_string(k) + ".mid";
+
+                if (cycle.size() == 36)
+                midi.writeToFile(filename);
+
+                //TODO render sound
             }
 
 
