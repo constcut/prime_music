@@ -232,8 +232,6 @@ void findPerfectCycle(int midiNote) { //TODO init list
 
     for (size_t i = 1; i < 12; ++i) {
 
-        //std::cout << std::endl << "_ " << i << std::endl;
-
         std::vector<int> keyNotes {midiNote % 12 };
         int currentNote = midiNote;
 
@@ -270,6 +268,64 @@ void findPerfectCycle(int midiNote) { //TODO init list
         midi.push_back(track);
         std::string filename = std::to_string(i) + "_.mid";
         midi.writeToFile(filename);
+    }
+
+}
+
+
+
+
+void findPerfectCycle2(int midiNote) { //TODO init list
+
+
+    for (size_t i = 1; i < 12; ++i) {
+
+
+
+        for (size_t i2 = i + 1; i2 < 12; i2++) {
+
+            std::vector<int> keyNotes {midiNote % 12 };
+            int currentNote = midiNote;
+
+            for (size_t j = 0; j < 10000; ++j) {
+
+                if (j % 2 == 0)
+                    currentNote += i;
+                if (j%2 == 1)
+                    currentNote += i2;
+
+                keyNotes.push_back(currentNote % 12);
+
+                if (gotCycle(keyNotes))
+                    break;
+            }
+
+            std::vector<int> perfectCycle = std::vector<int>(keyNotes.begin(),
+                                            keyNotes.begin() + keyNotes.size()/2);
+
+            MidiTrack track;
+            track.pushChangeBPM(240, 0); //somehow 240 is almost! realtime
+
+            for (auto& interval: perfectCycle) {
+                track.pushNoteOn(48 + interval, 100, 0);
+                track.accumulate(500);
+                track.pushNoteOff(48 + interval, 100, 0);
+            }
+            for (auto& interval: perfectCycle) {
+                track.pushNoteOn(48 + interval, 100, 0);
+                track.accumulate(500);
+                track.pushNoteOff(48 + interval, 100, 0);
+            }
+
+            std::cout << "Perfect cycle " << i << " " << perfectCycle.size() << std::endl;
+            track.pushEvent47();
+
+            MidiFile midi;
+            midi.push_back(track);
+            std::string filename = std::to_string(i) + "_" + std::to_string(i2) + "_.mid";
+            midi.writeToFile(filename);
+
+        }
 
     }
 
@@ -277,11 +333,13 @@ void findPerfectCycle(int midiNote) { //TODO init list
 
 
 
+
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) ///TODO эта функия будет просто как пример, офрмить в виде библиотеки
 {
 
 
-    findPerfectCycle(36);
+    //findPerfectCycle(36);
+    findPerfectCycle2(36);
 
 
     return 0;
