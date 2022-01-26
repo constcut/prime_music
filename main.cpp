@@ -85,7 +85,7 @@ bool gotCycle(const std::vector<int>& sequence) {
 }
 
 
-std::vector<int> findPerfectCycle(int midiNote, double first, double second) { //TODO init list
+std::vector<int> findPerfectCycle2(int midiNote, double first, double second) { //TODO init list
 
     std::vector<int> keyNotes {midiNote % 12 };
 
@@ -140,16 +140,7 @@ std::vector<int> findPerfectCycleIntervals(int midiNote, int first, int second, 
 
 
 
-
-int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) ///TODO эта функия будет просто как пример, офрмить в виде библиотеки
-{
-
-    //printPrimeIntervals(primeList);
-
-    /*
-    auto x = exploreCyclesAndIntervals(primeList);
-    for (size_t i = 0; i < 10; ++i)
-        std::cout << primeList[i] << ")" << x[i] << " " << x[i] % 12 << std::endl;*/
+void tipleGeneration() {
 
 
     size_t count = 0;
@@ -231,6 +222,66 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) ///TODO эт�
 
     std::cout << std::endl << "TOTAL " << count <<
                " and " << kCount << std::endl;
+}
+
+
+
+
+void findPerfectCycle(int midiNote) { //TODO init list
+
+
+    for (size_t i = 1; i < 12; ++i) {
+
+        //std::cout << std::endl << "_ " << i << std::endl;
+
+        std::vector<int> keyNotes {midiNote % 12 };
+        int currentNote = midiNote;
+
+        for (size_t j = 0; j < 10000; ++j) {
+
+            currentNote += i;
+            keyNotes.push_back(currentNote % 12);
+
+            if (gotCycle(keyNotes))
+                break;
+        }
+
+        std::vector<int> perfectCycle = std::vector<int>(keyNotes.begin(),
+                                        keyNotes.begin() + keyNotes.size()/2);
+
+        MidiTrack track;
+        track.pushChangeBPM(240, 0); //somehow 240 is almost! realtime
+
+        for (auto& interval: perfectCycle) {
+            track.pushNoteOn(48 + interval, 100, 0);
+            track.accumulate(500);
+            track.pushNoteOff(48 + interval, 100, 0);
+        }
+        for (auto& interval: perfectCycle) {
+            track.pushNoteOn(48 + interval, 100, 0);
+            track.accumulate(500);
+            track.pushNoteOff(48 + interval, 100, 0);
+        }
+
+        std::cout << "Perfect cycle " << i << " " << perfectCycle.size() << std::endl;
+        track.pushEvent47();
+
+        MidiFile midi;
+        midi.push_back(track);
+        std::string filename = std::to_string(i) + "_.mid";
+        midi.writeToFile(filename);
+
+    }
+
+}
+
+
+
+int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) ///TODO эта функия будет просто как пример, офрмить в виде библиотеки
+{
+
+
+    findPerfectCycle(36);
 
 
     return 0;
